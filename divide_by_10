@@ -1,0 +1,33 @@
+module divide_by_10(clock,reset,out_clk);
+input logic clock_reset;
+llogic [4:0]counter;
+output logic out_clk;
+
+localparam int duty_count=10*duty/100;
+
+always@(posedge clock)
+begin
+ if(reset)
+  out_clk<=1'b0;
+ elseif(counter>=9-duty_count)
+  out_Clk<=1'b1;
+ else
+  begin
+   if(counter==9)
+     begin
+      out_clk<=1'b0;
+      end
+   end
+end
+
+always@(posedge clock)
+begin
+ if(reset)
+  counter<='0;
+ elseif(counter==9)
+  counter<='0;
+ else
+   counter<=counter+1'b1;
+ end
+ 
+ endmodule
