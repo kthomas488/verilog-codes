@@ -19,7 +19,7 @@ begin
       end
    end
 end
-
+//new line
 always@(posedge clock)
 begin
  if(reset)
