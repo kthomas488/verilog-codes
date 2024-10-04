@@ -5,6 +5,7 @@ module five_min(clk,reset,value,valid,valid_out);
   input logic [31:0] value;
   output logic valid_out;
   
+  logic [2:0] count_cycle;
   logic [4:0] count_ones,count_zeroes;
   logic [31:0] in_value;
   always@(posedge clk or posedge reset)
@@ -31,9 +32,16 @@ module five_min(clk,reset,value,valid,valid_out);
     end
   
   always@(posedge clk) begin
-    if( count_ones>=5 && count_zeroes >= 5)begin
+    if(reset)
+      count_cycle<='b0;
+    else if( count_ones>=5 && count_zeroes >= 5 && count_cycle ==1'b0)begin
        valid_out<=1'b1;
+      count_cycle<= count_cycle+1'b1;
     end
-  end
+    else if(count_cycle == 1'b1)begin
+       valid_out<=1'b0;
+    end
+   end
   
 endmodule
+ 
