@@ -8,40 +8,26 @@ module five_min(clk,reset,value,valid,valid_out);
   logic [2:0] count_cycle;
   logic [4:0] count_ones,count_zeroes;
   logic [31:0] in_value;
-  always@(posedge clk or posedge reset)
+ 
+  always_comb 
     begin
-      if(reset) begin
-        in_value<='b0;
-        count_ones<='b0;
-        count_zeroes<='b0;
+    count_ones=0;
+  	count_zeroes=0;
+      for(int i=0;i<32;i=i+1)begin
+        if(value[i] == 1'b1)
+          count_ones = count_ones + 1'b1;
+      else if(value[i] == 1'b0)
+          count_zeroes = count_zeroes + 1'b1;
       end
-      else if(valid)
-        in_value<=value;
-      else begin
-        for(int i=0;i<31;i=i+1) begin
-          if(in_value[i] == 1'b1) begin
-            count_ones<= count_ones+1'b1;
-          end
-          else if(in_value[i] == 1'b0) begin
-            count_zeroes<= count_zeroes+1'b1;
-          end
-          end
-        //if(count_ones>=5 && count_zeroes >=5)
-        //  valid_out<=1'b1;
-      end
-    end
-  
-  always@(posedge clk) begin
+  end
+   
+  always@(posedge clk)begin
     if(reset)
       count_cycle<='b0;
-    else if( count_ones>=5 && count_zeroes >= 5 && count_cycle ==1'b0)begin
-       valid_out<=1'b1;
-      count_cycle<= count_cycle+1'b1;
+    else if(count_ones>=5 && count_zeroes>=5 )begin
+      valid_out<=1'b1;
     end
-    else if(count_cycle == 1'b1)begin
-       valid_out<=1'b0;
+    else begin
+      valid_out<=1'b0;
     end
-   end
-  
-endmodule
- 
+  end
